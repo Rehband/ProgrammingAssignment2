@@ -18,8 +18,8 @@ makeCacheMatrix <- function(x = matrix()) {
 	
 	list(set = set, 
              get = get,
-             getInverse = getInverse,
-             setInverse = setInverse)
+             setInverse = setInverse,
+             getInverse = getInverse)
 }
 
 ## This function computes the inverse of the special "matrix" 
@@ -41,3 +41,35 @@ cacheSolve <- function(x, ...) {
 	## Return a matrix that is the inverse of 'x'
 	m
 }
+
+## Test
+
+## Create matrix
+M <- cbind(c(1,2,3),c(1,4,6),c(2,-3,-5))
+m <- makeCacheMatrix(M)
+m$get()
+##      [,1] [,2] [,3]
+## [1,]    1    1    2
+## [2,]    2    4   -3
+## [3,]    3    6   -5
+
+cacheSolve(m)
+## No cache in the first run
+##      [,1] [,2] [,3]
+## [1,]    2  -17   11
+## [2,]   -1   11   -7
+## [3,]    0    3   -2
+
+cacheSolve(m)
+## getting cached data...
+##      [,1] [,2] [,3]
+## [1,]    2  -17   11
+## [2,]   -1   11   -7
+## [3,]    0    3   -2
+
+mi <- cacheSolve(m)   
+mi%*%M
+##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    1    0
+## [3,]    0    0    1
